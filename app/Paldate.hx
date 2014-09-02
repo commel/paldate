@@ -1,23 +1,27 @@
 package app;
 
-import php.Lib;
-
 class Paldate {
 
-  static function main() {
-    new Paldate();
+  private var ts:Date;
+
+  public function new(?ts:Date) {
+    this.ts = ts != null ? ts : Date.now();
   }
-  
-  public function new() {
-    var date = Date.now();
-    var year = (date.getFullYear() - 1800) * 12;
-    var month = date.getMonth();
 
-    var palYear = year + month;
-    var tmpl = new haxe.Template( sys.io.File.getContent("../web/index.html") );
-    var output = tmpl.execute( { palYear: palYear } );
+  public function getYear() {
+    return ((ts.getFullYear() - 1800) * 12) + ts.getMonth();
+  }
 
-    Lib.print(output);    
+  public function getMonth() {
+    return Math.ceil( ts.getDate() / 7 );
+  }
+
+  public function getDay() {
+    return ts.getDate() % 7;
+  }
+
+  public function getTimeIndex() {
+    return Math.ceil( ((ts.getHours() * 60 + ts.getMinutes()) / 1440) * 100 );
   }
 
 }
